@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import { Container } from "@mui/system";
 import { Paper } from "@mui/material";
 import css from "./Edit.module.css";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 export default function ToDoList() {
@@ -17,20 +17,19 @@ export default function ToDoList() {
     content: "",
   });
   const { id } = useParams();
+  //   const navigate = Navigate();
 
   // const
 
   const loadUser = async () => {
-    const result = await axios.get(`http://localhost:8080/user/${id}`);
+    const result = await axios.get(`http://localhost:8080/api/add/${id}`);
     setToDos(result.data);
   };
 
-  const updateUser = (id) => {
+  const updateUser = async (e) => {
     // id.preventDefault();
-    fetch(`http://localhost:8080/api/add/${id}`, {
-      method: "PUT",
-    });
-    window.location.reload();
+    await axios.put(`http://localhost:8080/api/add/${id}`, ToDos);
+    // <Link to="/"></Link>;
   };
 
   useEffect(() => {
@@ -81,6 +80,7 @@ export default function ToDoList() {
               className="btn"
               variant="contained"
               color="success"
+              onClick={(e) => updateUser(e)}
               //   onClick={<Link to={`/edit/${ToDo.id}`}></Link>}
             >
               수정

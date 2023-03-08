@@ -11,7 +11,7 @@ function App() {
         <Appbar />
         <Routes>
           <Route path="/" element={<ToDoList />} />
-          <Route exact path="/edituser/:id" element={<Edit />} />
+          <Route exact path="/edittodo/:id" element={<Edit />} />
         </Routes>
       </Router>
     </div>

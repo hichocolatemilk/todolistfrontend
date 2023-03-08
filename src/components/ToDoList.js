@@ -12,15 +12,25 @@ export default function ToDoList() {
   const paperStyle = { padding: "50px 20px", width: 500, margin: "20px auto" };
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
+  const [id, setID] = useState(0);
   const [ToDos, setToDos] = useState([]);
+  const ToDo = { name, content };
   // const { id } = useParams();
 
   // const
 
-  const postUser = async (e) => {
-    const ToDo = { name, content };
-    await axios.post("http://localhost:8080/api/add", ToDo);
-    window.location.reload();
+  const postUser = async () => {
+    await axios
+      .post("http://localhost:8080/api/add", JSON.stringify(ToDo), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      });
+    console.log(ToDo);
+    // window.location.reload();
   };
 
   const deleteUser = async (id) => {
@@ -86,7 +96,7 @@ export default function ToDoList() {
         </h1>
         {ToDos.map((ToDo) => (
           <Paper key={ToDo.id} className={css.ToDo}>
-            Name: {ToDo.name} Content: {ToDo.content}
+            ID: {ToDo.id} Name: {ToDo.name} Content: {ToDo.content}
             <div className={css.btn}>
               <Button
                 className="btn"
@@ -99,7 +109,7 @@ export default function ToDoList() {
 
               <Link
                 className="btn btn-outline-primary mx-2"
-                to={`/edituser/${ToDo.id}`}
+                to={`/edittodo/${ToDo.id}`}
               >
                 {" "}
                 <Button className="btn" variant="contained" color="success">
