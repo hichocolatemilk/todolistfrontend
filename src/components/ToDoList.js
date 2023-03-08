@@ -5,40 +5,36 @@ import Button from "@mui/material/Button";
 import { Container } from "@mui/system";
 import { Paper } from "@mui/material";
 import css from "./ToDoList.module.css";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 export default function ToDoList() {
   const paperStyle = { padding: "50px 20px", width: 500, margin: "20px auto" };
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
   const [ToDos, setToDos] = useState([]);
+  // const { id } = useParams();
 
   // const
 
-  const handleClick = (e) => {
+  const postUser = async (e) => {
     const ToDo = { name, content };
-    fetch("http://localhost:8080/api/add", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(ToDo),
-    }).then(() => {
-      console.log("NEW TODO ADD");
-    });
-    // e.preventDefault();
-    window.location.reload();
-  };
-  const deleteUser = (id) => {
-    fetch(`http://localhost:8080/api/add/${id}`, {
-      method: "DELETE",
-    });
+    await axios.post("http://localhost:8080/api/add", ToDo);
     window.location.reload();
   };
 
+  const deleteUser = async (id) => {
+    await axios.delete(`http://localhost:8080/api/add/${id}`);
+    loadUser();
+    window.location.reload();
+  };
+
+  const loadUser = async () => {
+    const result = await axios.get("http://localhost:8080/api/getall");
+    setToDos(result.data);
+  };
   useEffect(() => {
-    fetch("http://localhost:8080/api/getall")
-      .then((response) => response.json())
-      .then((result) => {
-        setToDos(result);
-      });
+    loadUser();
   }, []);
 
   return (
@@ -55,9 +51,6 @@ export default function ToDoList() {
           noValidate
           autoComplete="off"
         >
-          {/* <TextField id="outlined-basic" label="Outlined" variant="outlined" />
-      <TextField id="filled-basic" label="Filled" variant="filled" /> */}
-
           <TextField
             id="standard-basic"
             label="Name"
@@ -75,22 +68,15 @@ export default function ToDoList() {
             value={content}
             required
             onChange={(e) => setContent(e.target.value)}
-            // TextField.PropTypes = {
-            //   name: propTypes.String.isRequired,
-            // };
           />
-
           <Button
             disabled={!name || !content}
             variant="contained"
             color="success"
-            onClick={handleClick}
+            onClick={postUser}
           >
             확인
           </Button>
-          {/* <Button variant="outlined" color="error">
-            삭제m
-          </Button> */}
         </Box>
       </Paper>
 
@@ -110,14 +96,16 @@ export default function ToDoList() {
               >
                 Delete
               </Button>
-              <Button
-                className="btn"
-                variant="contained"
-                color="success"
-                onClick={handleClick}
+
+              <Link
+                className="btn btn-outline-primary mx-2"
+                to={`/edituser/${ToDo.id}`}
               >
-                Edit
-              </Button>
+                {" "}
+                <Button className="btn" variant="contained" color="success">
+                  Edit
+                </Button>
+              </Link>
             </div>
           </Paper>
         ))}
