@@ -2,6 +2,7 @@ import "./App.css";
 import Appbar from "./components/Appbar";
 import ToDoList from "./components/ToDoList";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Edit from "./page/Edit";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         <Appbar />
         <Routes>
           <Route path="/" element={<ToDoList />} />
+          <Route exact path="/edituser/:id" element={<Edit />} />
         </Routes>
       </Router>
     </div>
