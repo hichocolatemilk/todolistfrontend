@@ -12,7 +12,6 @@ export default function ToDoList() {
   const paperStyle = { padding: "50px 20px", width: 500, margin: "20px auto" };
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
-  // const [id, setID] = useState(0);
   const [ToDos, setToDos] = useState([]);
   const ToDo = { name, content };
   // const { id } = useParams();
@@ -57,7 +56,7 @@ export default function ToDoList() {
             label="Name"
             variant="standard"
             fullWidth
-            value={name}
+            value={name || ""}
             required
             onChange={(e) => setName(e.target.value)}
           />
@@ -66,7 +65,7 @@ export default function ToDoList() {
             label="Content"
             variant="standard"
             fullWidth
-            value={content}
+            value={content || ""}
             required
             onChange={(e) => setContent(e.target.value)}
           />
