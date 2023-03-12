@@ -5,14 +5,14 @@ import Button from "@mui/material/Button";
 import { Container } from "@mui/system";
 import { Paper } from "@mui/material";
 import css from "./ToDoList.module.css";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 export default function ToDoList() {
   const paperStyle = { padding: "50px 20px", width: 500, margin: "20px auto" };
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
-  const [id, setID] = useState(0);
+  // const [id, setID] = useState(0);
   const [ToDos, setToDos] = useState([]);
   const ToDo = { name, content };
   // const { id } = useParams();
@@ -20,17 +20,8 @@ export default function ToDoList() {
   // const
 
   const postUser = async () => {
-    await axios
-      .post("http://localhost:8080/api/add", JSON.stringify(ToDo), {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => {
-        console.log(res);
-      });
-    console.log(ToDo);
-    // window.location.reload();
+    await axios.post("http://localhost:8080/api/add", ToDo);
+    window.location.reload();
   };
 
   const deleteUser = async (id) => {
