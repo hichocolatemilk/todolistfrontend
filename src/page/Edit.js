@@ -5,69 +5,77 @@ import Button from "@mui/material/Button";
 import { Container } from "@mui/system";
 import { Paper } from "@mui/material";
 import css from "./Edit.module.css";
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 export default function ToDoList() {
   //   const paperStyle = { padding: "50px 20px", width: 500, margin: "20px auto" };
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
-  const [ToDos, setToDos] = useState({
-    name: "",
-    content: "",
-  });
+  const [todo, setToDo] = useState("");
+  const ToDo = { name, content };
   const { id } = useParams();
-  //   const navigate = Navigate();
+
+  // const onInputChange = (e) => {
+  //   setToDo({ ...toDo, [e.target.name]: e.target.value });
+  // };
 
   // const
 
+  let navigate = useNavigate();
+
+  //let
+
   const loadUser = async () => {
     const result = await axios.get(`http://localhost:8080/api/add/${id}`);
-    setToDos(result.data);
+    setToDo(result.data);
   };
 
   const updateUser = async (e) => {
-    // id.preventDefault();
-    await axios.put(`http://localhost:8080/api/add/${id}`, ToDos);
+    e.preventDefault();
+    await axios.put(`http://localhost:8080/api/add/${id}`, ToDo);
+    navigate("/");
     // <Link to="/"></Link>;
   };
 
   useEffect(() => {
     loadUser();
-  }, []);
+  });
 
   return (
     <Container>
-      <Paper elevation={3}>
+      <Paper>
         <h1>
           <u>Edit ToDo</u>
         </h1>
-        <Box
-          component="form"
-          sx={{
-            "& > :not(style)": { m: 5, width: "30ch" },
-          }}
-          noValidate
-          autoComplete="off"
-        >
-          <TextField
-            className={css.text}
-            id="standard-basic"
-            label="Name"
-            variant="standard"
-            fullWidth
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <TextField
-            className={css.text}
-            id="cssstandard-basic"
-            label="Content"
-            variant="standard"
-            fullWidth
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
+        <div>
+          <Box
+            component="form"
+            sx={{
+              "& > :not(style)": { m: 5, width: "30ch" },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <TextField
+              className={css.text}
+              id="standard-basic"
+              label="Name"
+              variant="standard"
+              fullWidth
+              value={name || ""}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <TextField
+              className={css.text}
+              id="cssstandard-basic"
+              label="Content"
+              variant="standard"
+              fullWidth
+              value={content || ""}
+              onChange={(e) => setContent(e.target.value)}
+            />
+          </Box>
           <div className="btn_btn">
             <Link className="btn btn-outline-primary mx-2" to="/">
               {" "}
@@ -80,13 +88,12 @@ export default function ToDoList() {
               className="btn"
               variant="contained"
               color="success"
-              onClick={(e) => updateUser(e)}
-              //   onClick={<Link to={`/edit/${ToDo.id}`}></Link>}
+              onClick={updateUser}
             >
               수정
             </Button>
           </div>
-        </Box>
+        </div>
       </Paper>
     </Container>
   );
