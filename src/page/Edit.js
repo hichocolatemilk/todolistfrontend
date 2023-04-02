@@ -5,14 +5,14 @@ import Button from "@mui/material/Button";
 import { Container } from "@mui/system";
 import { Paper } from "@mui/material";
 import css from "./Edit.module.css";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 export default function ToDoList() {
   //   const paperStyle = { padding: "50px 20px", width: 500, margin: "20px auto" };
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
-  const [todo, setToDo] = useState("");
+  const [setToDo] = useState("");
   const ToDo = { name, content };
   const { id } = useParams();
 
@@ -25,6 +25,10 @@ export default function ToDoList() {
   let navigate = useNavigate();
 
   //let
+
+  function onHome() {
+    navigate("/");
+  }
 
   const loadUser = async () => {
     const result = await axios.get(`http://localhost:8080/api/add/${id}`);
@@ -77,12 +81,14 @@ export default function ToDoList() {
             />
           </Box>
           <div className="btn_btn">
-            <Link className="btn btn-outline-primary mx-2" to="/">
-              {" "}
-              <Button className="btn" variant="contained" color="error">
-                Cancel
-              </Button>
-            </Link>
+            <Button
+              className="btn"
+              variant="contained"
+              color="error"
+              onClick={onHome}
+            >
+              Cancel
+            </Button>
 
             <Button
               className="btn"
