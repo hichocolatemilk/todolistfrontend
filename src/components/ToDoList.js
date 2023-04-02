@@ -19,18 +19,44 @@ export default function ToDoList() {
   // const
 
   const postUser = async () => {
-    await axios.post("http://localhost:8080/api/add", ToDo);
+    await axios
+      .post("/api/add", ToDo, {
+        headers: {
+          // "X-Custom-Header": "XMLHttpRequest",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accesstoken")}`,
+          withCredentials: true,
+        },
+      })
+      .then((result) => {
+        console.log(result.data.Authorization);
+      });
+
     window.location.reload();
   };
 
   const deleteUser = async (id) => {
-    await axios.delete(`http://localhost:8080/api/add/${id}`);
+    await axios.delete(`/api/add/${id}`, {
+      headers: {
+        // "X-Custom-Header": "XMLHttpRequest",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accesstoken")}`,
+        withCredentials: true,
+      },
+    });
     loadUser();
     window.location.reload();
   };
 
   const loadUser = async () => {
-    const result = await axios.get("http://localhost:8080/api/getall");
+    const result = await axios.get("/api/getall", {
+      headers: {
+        // "X-Custom-Header": "XMLHttpRequest",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accesstoken")}`,
+        withCredentials: true,
+      },
+    });
     setToDos(result.data);
   };
   useEffect(() => {
