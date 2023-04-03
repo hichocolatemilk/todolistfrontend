@@ -29,6 +29,7 @@ export default function Login() {
           samesite: "none",
         });
         localStorage.setItem("accesstoken", jwtToken.token);
+        window.location.reload();
       }
     } catch {
       alert("로그인이 실패했습니다. 정보가 올바른지 다시 확인해주세요");
@@ -86,7 +87,7 @@ export default function Login() {
                       value={password || ""}
                       onChange={(e) => setPassword(e.target.value)}
                     ></input>
-                    <button type="button" onClick={register}>
+                    <button type="submit" onClick={register}>
                       {" "}
                       Submit{" "}
                     </button>
