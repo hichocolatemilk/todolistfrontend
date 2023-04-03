@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -9,16 +9,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 export default function ToDoList() {
-  //   const paperStyle = { padding: "50px 20px", width: 500, margin: "20px auto" };
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
-  const [setToDo] = useState("");
   const ToDo = { name, content };
   const { id } = useParams();
-
-  // const onInputChange = (e) => {
-  //   setToDo({ ...toDo, [e.target.name]: e.target.value });
-  // };
 
   // const
 
@@ -30,21 +24,16 @@ export default function ToDoList() {
     navigate("/");
   }
 
-  const loadUser = async () => {
-    const result = await axios.get(`http://localhost:8080/api/add/${id}`);
-    setToDo(result.data);
-  };
-
-  const updateUser = async (e) => {
-    e.preventDefault();
-    await axios.put(`http://localhost:8080/api/add/${id}`, ToDo);
+  const updateUser = async () => {
+    await axios.put(`/api/add/${id}`, ToDo, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accesstoken")}`,
+      },
+    });
     navigate("/");
-    // <Link to="/"></Link>;
   };
-
-  useEffect(() => {
-    loadUser();
-  });
 
   return (
     <Container>

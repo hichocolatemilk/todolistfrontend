@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import { Container } from "@mui/system";
 import { Paper } from "@mui/material";
 import css from "./ToDoList.module.css";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function ToDoList() {
@@ -14,15 +14,17 @@ export default function ToDoList() {
   const [content, setContent] = useState("");
   const [ToDos, setToDos] = useState([]);
   const ToDo = { name, content };
-  // const { id } = useParams();
 
   // const
+
+  let navigate = useNavigate();
+
+  //let
 
   const postUser = async () => {
     await axios
       .post("/api/add", ToDo, {
         headers: {
-          // "X-Custom-Header": "XMLHttpRequest",
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("accesstoken")}`,
           withCredentials: true,
@@ -38,7 +40,6 @@ export default function ToDoList() {
   const deleteUser = async (id) => {
     await axios.delete(`/api/add/${id}`, {
       headers: {
-        // "X-Custom-Header": "XMLHttpRequest",
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("accesstoken")}`,
         withCredentials: true,
@@ -51,7 +52,6 @@ export default function ToDoList() {
   const loadUser = async () => {
     const result = await axios.get("/api/getall", {
       headers: {
-        // "X-Custom-Header": "XMLHttpRequest",
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("accesstoken")}`,
         withCredentials: true,
@@ -62,6 +62,10 @@ export default function ToDoList() {
   useEffect(() => {
     loadUser();
   }, []);
+
+  const onEdit = (id) => {
+    navigate(`/edittodo/${id}`);
+  };
 
   return (
     <Container>
@@ -123,15 +127,14 @@ export default function ToDoList() {
                 Delete
               </Button>
 
-              <Link
-                className="btn btn-outline-primary mx-2"
-                to={`/edittodo/${ToDo.id}`}
+              <Button
+                className="btn"
+                variant="contained"
+                color="success"
+                onClick={() => onEdit(ToDo.id)}
               >
-                {" "}
-                <Button className="btn" variant="contained" color="success">
-                  Edit
-                </Button>
-              </Link>
+                Edit
+              </Button>
             </div>
           </Paper>
         ))}
